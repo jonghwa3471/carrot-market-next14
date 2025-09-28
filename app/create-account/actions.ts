@@ -11,6 +11,7 @@ import z from "zod";
 import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
 import { redirect } from "next/navigation";
+import getSession from "@/lib/session";
 
 const checkUsername = (username: string) => !username.includes("potato");
 
@@ -115,15 +116,9 @@ export async function createAccount(prevState: any, formData: FormData) {
         id: true,
       },
     });
-    // log the user in
-    const cookie = await getIronSession(cookies(), {
-      cookieName: "delicious-carrot",
-      password: process.env.COOKIE_PASSWORD!,
-    });
-    //@ts-expect-error: just for now
-    cookie.id = user.id;
-    await cookie.save();
-    // redirect "/home"
+    const session = await getSession();
+    session.id = user.id;
+    await session.save();
     redirect("/profile");
   }
 }
