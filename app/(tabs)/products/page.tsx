@@ -1,7 +1,7 @@
-import ListProduct from "@/components/list-product";
+import ProductList from "@/components/product-list";
 import db from "@/lib/db";
 
-async function getProducts() {
+async function getInitialProducts() {
   const products = await db.product.findMany({
     select: {
       title: true,
@@ -10,17 +10,21 @@ async function getProducts() {
       photo: true,
       id: true,
     },
+    take: 1,
+    orderBy: {
+      created_at: "desc",
+    },
   });
   return products;
 }
 
+export type InitialProducts = Awaited<ReturnType<typeof getInitialProducts>>;
+
 export default async function Products() {
-  const products = await getProducts();
+  const initialProducts = await getInitialProducts();
   return (
-    <div className="flex flex-col gap-5 p-5">
-      {products.map((product) => (
-        <ListProduct key={product.id} {...product} />
-      ))}
+    <div>
+      <ProductList initialProducts={initialProducts} />
     </div>
   );
 }
