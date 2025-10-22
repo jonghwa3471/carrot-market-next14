@@ -30,7 +30,7 @@ const formSchema = z.object({
     .refine(checkEmailExists, "An account with this email does not exist."),
   password: z.string({
     error: (issue) => {
-      if (issue.input === "undefined") {
+      if (issue.input === undefined) {
         return "Password is required";
       }
     },
