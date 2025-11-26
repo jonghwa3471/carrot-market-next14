@@ -7,34 +7,10 @@ import getSession from "@/lib/session";
 import { redirect } from "next/navigation";
 
 const productSchema = z.object({
-  photo: z.string({
-    error: (issue) => {
-      if (issue.input === undefined) {
-        return "Photo is required";
-      }
-    },
-  }),
-  title: z.string({
-    error: (issue) => {
-      if (issue.input === undefined) {
-        return "Title is required";
-      }
-    },
-  }),
-  description: z.string({
-    error: (issue) => {
-      if (issue.input === undefined) {
-        return "Description is required";
-      }
-    },
-  }),
-  price: z.coerce.number({
-    error: (issue) => {
-      if (issue.input === undefined) {
-        return "Price is required";
-      }
-    },
-  }),
+  photo: z.string().nonempty("Photo is required"),
+  title: z.string().nonempty("Title is required"),
+  description: z.string().nonempty("Description is required"),
+  price: z.coerce.number().min(1, "Price is required"),
 });
 
 export async function uploadProduct(_: any, formData: FormData) {

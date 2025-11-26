@@ -24,12 +24,10 @@ const checkPasswords = ({
 const formSchema = z
   .object({
     username: z
-      .string({
-        error: (issue) =>
-          issue.input === undefined
-            ? "Where is my username???"
-            : "Username must be a string!",
-      })
+      .string("Username must be a string!")
+      .toLowerCase()
+      .trim()
+      .nonempty("Where is my username???")
       // invalid_type_error, required_error is deleted in string()
       /*     .min(3, {
       error: (issue) => {
@@ -38,8 +36,6 @@ const formSchema = z
         }
       },
     }) */
-      .toLowerCase()
-      .trim()
       // .transform((username) => `🔥${username}🔥`)
       .refine(checkUsername, "No potatoes allowed!"),
     email: z.email().toLowerCase(),
