@@ -78,7 +78,7 @@ const formSchema = z
     }
   });
 
-export async function createAccount(prevState: any, formData: FormData) {
+export async function createAccount(prevState: unknown, formData: FormData) {
   const data = {
     username: formData.get("username"),
     email: formData.get("email"),

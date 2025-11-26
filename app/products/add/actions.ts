@@ -12,7 +12,7 @@ const productSchema = z.object({
   price: z.coerce.number().min(1, "Price is required"),
 });
 
-export async function uploadProduct(_: any, formData: FormData) {
+export async function uploadProduct(_: unknown, formData: FormData) {
   const data = {
     photo: formData.get("photo"),
     title: formData.get("title"),
