@@ -18,6 +18,7 @@ export default function AddProduct() {
     handleSubmit,
     formState: { errors },
     setValue,
+    setError,
   } = useForm<ProductType>({
     resolver: zodResolver(productSchema),
   });
@@ -66,9 +67,11 @@ export default function AddProduct() {
     formData.append("price", data.price + "");
     formData.append("description", data.description);
     formData.append("photo", data.photo);
-    return uploadProduct(formData);
+    const serverErrors = await uploadProduct(formData);
+    if (serverErrors) {
+      // setError()
+    }
   });
-
   return (
     <div>
       <form onSubmit={onSubmit} className="flex flex-col gap-5 p-5">
