@@ -23,12 +23,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  // @ts-ignore
+  // @ts-expect-error potato
   potato,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  console.log(potato);
   return (
     <html lang="en">
       <body
