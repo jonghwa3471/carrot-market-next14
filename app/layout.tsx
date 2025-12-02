@@ -23,14 +23,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  // @ts-ignore
+  potato,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  console.log(potato);
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} mx-auto max-w-screen-sm bg-neutral-900 pb-80 text-white antialiased`}
       >
+        {potato}
         {children}
       </body>
     </html>
