@@ -1,6 +1,7 @@
 import ProductList from "@/components/product-list";
 import db from "@/lib/db";
 import { PlusIcon } from "@heroicons/react/24/solid";
+import { Metadata } from "next";
 import Link from "next/link";
 
 async function getInitialProducts() {
@@ -12,7 +13,7 @@ async function getInitialProducts() {
       photo: true,
       id: true,
     },
-    take: 1,
+    // take: 1,
     orderBy: {
       created_at: "desc",
     },
@@ -21,6 +22,10 @@ async function getInitialProducts() {
 }
 
 export type InitialProducts = Awaited<ReturnType<typeof getInitialProducts>>;
+
+export const metadata: Metadata = {
+  title: "Home",
+};
 
 export default async function Products() {
   const initialProducts = await getInitialProducts();
