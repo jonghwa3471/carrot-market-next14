@@ -5,7 +5,9 @@ import { Metadata } from "next";
 import { unstable_cache as nextCache } from "next/cache";
 import Link from "next/link";
 
-const getCachedProducts = nextCache(getInitialProducts, ["home-products"]);
+const getCachedProducts = nextCache(getInitialProducts, ["home-products"], {
+  revalidate: 30,
+});
 
 async function getInitialProducts() {
   console.log("hit!!!!!");
