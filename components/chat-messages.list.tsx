@@ -3,9 +3,9 @@
 import { InitialChatMessages } from "@/app/chats/[id]/page";
 import { formatToTimeAgo } from "@/lib/utils";
 import { ArrowUpCircleIcon, UserIcon } from "@heroicons/react/24/solid";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, RealtimeChannel } from "@supabase/supabase-js";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const SUPABASE_PUBLIC_KEY =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNvZWlucWl0ZWZycW9vZ3RmandlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYxMjU1MDYsImV4cCI6MjA4MTcwMTUwNn0.O4jdAqXPTD9Z7sW9DV1HzD_Ou5cQQmB4U61f3nD1wbc";
@@ -18,6 +18,8 @@ interface ChatMessagesListProps {
   chatRoomId: string;
 }
 
+const client = createClient(SUPABASE_URL, SUPABASE_PUBLIC_KEY);
+
 export default function ChatMessagesList({
   initialMessages,
   userId,
@@ -25,6 +27,7 @@ export default function ChatMessagesList({
 }: ChatMessagesListProps) {
   const [messages, setMessages] = useState(initialMessages);
   const [message, setMessage] = useState("");
+  const channel = useRef<RealtimeChannel>();
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { value },
@@ -46,14 +49,25 @@ export default function ChatMessagesList({
         },
       },
     ]);
+    channel.current?.send({
+      type: "broadcast",
+      event: "message",
+      payload: {
+        message,
+      },
+    });
     setMessage("");
   };
   useEffect(() => {
-    const client = createClient(SUPABASE_URL, SUPABASE_PUBLIC_KEY);
-    const channel = client.channel(`room-${chatRoomId}`);
-    channel.on("broadcast", { event: "message" }, (payload) => {
-      console.log(payload);
-    });
+    channel.current = client.channel(`room-${chatRoomId}`);
+    channel.current
+      .on("broadcast", { event: "message" }, (payload) => {
+        console.log(payload);
+      })
+      .subscribe();
+    return () => {
+      channel.current?.unsubscribe();
+    };
   }, []);
   return (
     <div className="flex min-h-screen flex-col justify-end gap-5 p-5">

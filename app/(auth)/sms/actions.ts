@@ -92,7 +92,7 @@ export async function smsLogin(prevState: ActionState, formData: FormData) {
           },
         },
       });
-      const client = twilio(
+      /*       const client = twilio(
         process.env.TWILIO_ACCOUNT_SID,
         process.env.TWILIO_AUTH_TOKEN,
       );
@@ -101,7 +101,7 @@ export async function smsLogin(prevState: ActionState, formData: FormData) {
         from: process.env.TWILIO_PHONE_NUMBER!,
         to: process.env.MY_PHONE_NUMBER!,
         // to: result.data,
-      });
+      }); */
       return {
         token: true,
       };
