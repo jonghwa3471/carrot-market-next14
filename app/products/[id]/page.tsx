@@ -12,7 +12,7 @@ async function getIsOwner(userId: number) {
   if (session.id) {
     return session.id === userId;
   } */
-  return false;
+  return true;
 }
 
 async function getProduct(id: number) {
