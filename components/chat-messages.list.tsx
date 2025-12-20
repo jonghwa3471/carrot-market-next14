@@ -16,6 +16,8 @@ interface ChatMessagesListProps {
   initialMessages: InitialChatMessages;
   userId: number;
   chatRoomId: string;
+  username: string;
+  avatar: string | null;
 }
 
 const client = createClient(SUPABASE_URL, SUPABASE_PUBLIC_KEY);
@@ -24,6 +26,8 @@ export default function ChatMessagesList({
   initialMessages,
   userId,
   chatRoomId,
+  username,
+  avatar,
 }: ChatMessagesListProps) {
   const [messages, setMessages] = useState(initialMessages);
   const [message, setMessage] = useState("");
@@ -53,7 +57,14 @@ export default function ChatMessagesList({
       type: "broadcast",
       event: "message",
       payload: {
-        message,
+        id: Date.now(),
+        payload: message,
+        created_at: new Date(),
+        userId,
+        user: {
+          username,
+          avatar,
+        },
       },
     });
     setMessage("");
@@ -62,7 +73,7 @@ export default function ChatMessagesList({
     channel.current = client.channel(`room-${chatRoomId}`);
     channel.current
       .on("broadcast", { event: "message" }, (payload) => {
-        console.log(payload);
+        setMessages((prev) => [...prev, payload.payload]);
       })
       .subscribe();
     return () => {
