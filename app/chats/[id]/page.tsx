@@ -1,7 +1,6 @@
 import ChatMessagesList from "@/components/chat-messages.list";
 import db from "@/lib/db";
 import getSession from "@/lib/session";
-import { unstable_cache as nextCache } from "next/cache";
 import { notFound } from "next/navigation";
 
 async function getRoom(id: string) {
