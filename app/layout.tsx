@@ -47,7 +47,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  console.log(metallica);
   return (
     <html lang="en">
       <body
