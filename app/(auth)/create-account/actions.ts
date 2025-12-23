@@ -1,6 +1,6 @@
 "use server";
 
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import {
   PASSWORD_MIN_LENGTH,
   PASSWORD_REGEX,
